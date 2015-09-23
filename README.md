@@ -23,7 +23,7 @@ For [Hugo][] to rewrite resource urls, use the following in your brunch config:
 modules.exports = config:
   # ...
   plugins:
-    hash:
+    hashfingerprint:
       manifest: 'data/manifest.json'
   paths:
     public: 'static'

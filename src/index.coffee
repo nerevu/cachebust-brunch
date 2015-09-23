@@ -7,7 +7,7 @@ module.exports = class Hash
   brunchPlugin: yes
 
   constructor: (@config) ->
-    @options = @config?.plugins?.hash ? {}
+    @options = @config?.plugins?.hashfingerprint ? {}
     @targets = @options.extensions or [ /\.css$/, /\.js$/ ]
 
   onCompile: (generatedFiles) ->
