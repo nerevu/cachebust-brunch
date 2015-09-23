@@ -1,6 +1,6 @@
 {
   "name": "hashfingerprint-brunch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
   "homepage": "https://github.com/jvanderneutstulen/hashfingerprint-brunch",
