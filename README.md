@@ -40,7 +40,33 @@ This will lookup the fingerprinted filename for 'css/mycss.css' from data/manife
 Options
 -------
 
+Default configuration:
 
+```coffeescript
+module.exports = config:
+  plugins:
+    hashfingerprint:
+      manifest: 'public/manifest.json'
+      extensions: [
+        /\.js$/,
+        /\.css$/
+      ]
+      precision: 8
+```
+
+### manifest
+
+Output location of the manifest file.
+
+### extensions
+
+Array of extensions to match. Regex must be acceptable by str.match.
+The array will be matched against the list of generated files.
+
+### precision
+
+How many characters of the SHA1 hash must be used in the hashed
+filename. Default should be fine.
 
 License
 -------
