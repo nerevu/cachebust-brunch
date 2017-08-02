@@ -15,8 +15,6 @@ Usage
 _Note: if you're using [gzip-brunch][] make sure fingerprinter-brunch is listed before
 gzip-brunch in the dependency list of your package.json_
 
-By default fingerprinter-brunch will process generated files with extension '.js' and '.css'.
-
 
 Options
 -------
