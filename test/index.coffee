@@ -60,7 +60,7 @@ describe 'Hash', ->
   describe 'no generated files', ->
     beforeEach ->
       setupGeneratedFiles()
-      hash.onCompile({})
+      hash.onCompile([], [])
 
     it 'original files exist', ->
       for file of FIXTURES_OUTPUT
@@ -76,4 +76,3 @@ describe 'Hash', ->
     it 'manifest should be empty', ->
       manifest = fse.readFileSync(buildFilename('public/manifest.json'))
       expect(manifest.toString()).to.be.equal '{}'
-

@@ -1,35 +1,35 @@
-fs      = require 'fs'
-sysPath = require 'path'
-crypto  = require 'crypto'
+fs = require 'fs'
+crypto = require 'crypto'
+path = require 'path'
 pathlib = require 'path'
+glob = require 'glob'
 
 module.exports = class Hash
   brunchPlugin: yes
 
   constructor: (@config) ->
-    @options = @config?.plugins?.hashfingerprint ? {}
-    @targets = @options.extensions or [ /\.css$/, /\.js$/ ]
+    @options = @config?.plugins?.hash ? {}
+    @publicPath = @options.public_path
 
-  onCompile: (generatedFiles) ->
-    #return unless @config.optimize
+  onCompile: (generatedFiles, generatedAssets) ->
+    paths = generatedFiles.map (file) -> file.path
+    paths = paths.concat generatedAssets.map (asset) -> asset.destinationPath
 
     map = {}
 
-    for target in @targets
-      for generatedFile in generatedFiles
-        file = generatedFile.path
-        if file.match target
+    for path in paths
+      if @config.optimize
+        outputPath = @_hash path
+      else
+        outputPath = path
 
-          output_file = @_hash file
+      input_map = pathlib.relative(@config.paths.public, path)
+      output_map = pathlib.relative(@config.paths.public, outputPath)
 
-          input_map = pathlib.relative(@config.paths.public, file)
-          output_map = pathlib.relative(@config.paths.public, output_file)
-
-          map[input_map] = output_map
+      map[input_map] = output_map
 
     manifest = @options.manifest or pathlib.join(@config.paths.public, 'manifest.json')
     fs.writeFileSync(manifest, JSON.stringify(map, null, 4))
-
 
   _calculateHash: (file) ->
     data = fs.readFileSync file

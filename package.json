@@ -21,7 +21,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "coffee-coverage": "^0.6.3",
-    "coffee-script": "~1.10.0",
+    "coffee-script": "~1.1270",
     "fs-extra": "^0.24.0",
     "istanbul": "^0.3.20",
     "mocha": "^2.3.3"
