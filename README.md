@@ -1,6 +1,8 @@
 fingerprinter-brunch [![npm version](https://badge.fury.io/js/fingerprinter-brunch.svg)](http://badge.fury.io/js/fingerprinter-brunch)
 ======================
 
+Originally forked from https://github.com/jvanderneutstulen/hashfingerprint-brunch
+
 A [Brunch][] plugin that will rename assets with an unique SHA hash. This will allow
 better caching of assets. It will write a manifest file, so other tooling can
 rewrite the urls.
@@ -24,7 +26,7 @@ Default configuration:
 ```coffeescript
 module.exports = config:
   plugins:
-    hashfingerprint:
+    fingerprinter:
       manifest: 'public/manifest.json'
       precision: 8
 ```
