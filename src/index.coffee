@@ -25,7 +25,6 @@ module.exports = class Hash
           input_map = pathlib.relative(@config.paths.public, file)
           output_map = pathlib.relative(@config.paths.public, output_file)
 
-          console.info("Map: #{input_map} => #{output_map}")
           map[input_map] = output_map
 
     manifest = @options.manifest or pathlib.join(@config.paths.public, 'manifest.json')
@@ -51,8 +50,6 @@ module.exports = class Hash
     output_file = pathlib.join(dir, output_base)
 
 
-    console.info("Renaming: #{file} => #{output_file}")
     fs.renameSync file, output_file
 
     output_file
-
