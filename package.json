@@ -1,12 +1,12 @@
 {
-  "name": "hashfingerprint-brunch",
-  "version": "0.0.4",
+  "name": "fingerprinter-brunch",
+  "version": "0.0.1",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
-  "homepage": "https://github.com/jvanderneutstulen/hashfingerprint-brunch",
+  "homepage": "https://github.com/paulcsmith/fingerprinter-brunch",
   "repository": {
     "type": "git",
-    "url": "git@github.com:jvanderneutstulen/hashfingerprint-brunch.git"
+    "url": "git@github.com:paulcsmith/fingerprinter-brunch.git"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha && node_modules/.bin/istanbul report text-summary lcov"
@@ -16,7 +16,7 @@
     "cache",
     "hash"
   ],
-  "author": "Jasper van der Neut - Stulen",
+  "author": "Paul Smith",
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.3.0",
