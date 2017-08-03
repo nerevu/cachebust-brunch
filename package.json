@@ -1,6 +1,6 @@
 {
   "name": "fingerprinter-brunch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
   "homepage": "https://github.com/paulcsmith/fingerprinter-brunch",
