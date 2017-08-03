@@ -1,6 +1,5 @@
 fs = require 'fs'
 crypto = require 'crypto'
-path = require 'path'
 pathlib = require 'path'
 glob = require 'glob'
 
@@ -9,24 +8,23 @@ module.exports = class Hash
 
   constructor: (@config) ->
     @options = @config?.plugins?.hash ? {}
-    @publicPath = @options.public_path
 
   onCompile: (generatedFiles, generatedAssets) ->
-    paths = generatedFiles.map (file) -> file.path
-    paths = paths.concat generatedAssets.map (asset) -> asset.destinationPath
+    paths = glob.sync(pathlib.join(@config.paths.public, '*/*.*'))
 
     map = {}
 
     for path in paths
-      if @config.optimize
-        outputPath = @_hash path
-      else
-        outputPath = path
+      unless path.match(/\.map$/)
+        if @config.optimize
+          outputPath = @_hash path
+        else
+          outputPath = path
 
-      input_map = pathlib.relative(@config.paths.public, path)
-      output_map = pathlib.relative(@config.paths.public, outputPath)
+        input_map = pathlib.relative(@config.paths.public, path)
+        output_map = pathlib.relative(@config.paths.public, outputPath)
 
-      map[input_map] = output_map
+        map[input_map] = output_map
 
     manifest = @options.manifest or pathlib.join(@config.paths.public, 'manifest.json')
     fs.writeFileSync(manifest, JSON.stringify(map, null, 4))
