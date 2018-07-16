@@ -12,22 +12,21 @@ module.exports = class Hash
     @targets = @options.extensions or [/\.css$/, /\.js$/]
 
   onCompile: (generatedFiles) =>
-    unless @config.optimize
-      return
-
     hashedFiles = {}
 
-    for target in @targets
-      for generatedFile in generatedFiles
-        path = generatedFile.path
+    unless @config.optimize
+      for target in @targets
+        for generatedFile in generatedFiles
+          path = generatedFile.path
 
-        if path.match target
-          hashedName = @_hash path
-          inputPath = pathlib.relative(@publicFolder, path)
-          outputPath = pathlib.relative(@publicFolder, hashedName)
-          hashedFiles[inputPath] = outputPath
+          if path.match target
+            hashedName = @_hash path
+            inputPath = pathlib.relative(@publicFolder, path)
+            outputPath = pathlib.relative(@publicFolder, hashedName)
+            hashedFiles[inputPath] = outputPath
 
-    @replaceContent hashedFiles
+      @replaceContent hashedFiles
+
     manifest = @options.manifest or pathlib.join @publicFolder, 'manifest.json'
     fs.writeFileSync manifest, JSON.stringify(hashedFiles, null, 4)
 
