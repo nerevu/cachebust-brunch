@@ -21,6 +21,9 @@
   ],
   "author": "Reuben Cummings",
   "license": "MIT",
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
   "devDependencies": {
     "chai": "^3.3.0",
     "coffee-coverage": "^3.0.0",

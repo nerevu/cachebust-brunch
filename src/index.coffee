@@ -1,7 +1,7 @@
 fs = require 'fs'
 crypto = require 'crypto'
 pathlib = require 'path'
-glob = require 'glob'
+debug = require('debug') 'brunch:cachebust'
 
 module.exports = class Cachebust
   brunchPlugin: yes
@@ -14,7 +14,7 @@ module.exports = class Cachebust
   onCompile: (generatedFiles) =>
     hashedFiles = {}
 
-    unless @config.env[0] in (@options.environments or ['production'])
+    if @config.optimize
       for target in @targets
         for generatedFile in generatedFiles
           path = generatedFile.path
@@ -49,24 +49,16 @@ module.exports = class Cachebust
 
   replaceContent: (hashedFiles) =>
     reference = @options.reference or 'index.html'
+    refFile = "#{@publicFolder}/#{reference}"
+    content = fs.readFileSync(refFile, 'UTF-8')
 
-    glob "#{@publicFolder}/#{reference}", {}, (err, refFiles) ->
-      if err
-        throw new Error('Error with reference param ', err)
+    for inputName, outputName of hashedFiles
+      ext = path.extname(inputName)
+      base = path.basename(inputName, ext)
+      regExp = new RegExp("#{base}#{ext}")
 
-      for _, refFile of refFiles
-        if fs.existsSync(refFile)
-          content = fs.readFileSync(refFile, 'UTF-8')
+      if regExp.test(content)
+        content = content.replace(regExp, outputName)
+        debug("Replaced #{inputName} by #{outputName} in #{refFile}")
 
-          for inputPath, outputPath of hashedFiles
-            ext = path.extname(inputPath)
-            base = path.basename(inputPath, ext)
-            regExp = new RegExp(base + ext)
-
-            if regExp.test(content)
-              content = content.replace(regExp, outputPath)
-              debug("Replaced #{inputPath} by #{outputPath} in #{refFile}")
-
-          fs.writeFileSync(refFile, content)
-        else
-          throw new Error('File not found ', refFile)
+    fs.writeFileSync(refFile, content)
