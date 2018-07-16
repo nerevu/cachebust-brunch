@@ -19,6 +19,7 @@ module.exports = config:
   plugins:
     cachebust:
       manifest: 'public/manifest.json'
+      environments: ['production']
       reference: 'index.html'
       extensions: [
         /\.js$/

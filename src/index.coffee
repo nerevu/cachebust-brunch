@@ -14,7 +14,7 @@ module.exports = class Cachebust
   onCompile: (generatedFiles) =>
     hashedFiles = {}
 
-    unless @config.optimize
+    unless @config.env[0] in (@options.environments or ['production'])
       for target in @targets
         for generatedFile in generatedFiles
           path = generatedFile.path
