@@ -1,6 +1,6 @@
 {
   "name": "cachebust-brunch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
   "homepage": "https://github.com/reubano/cachebust-brunch",
