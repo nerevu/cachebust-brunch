@@ -21,9 +21,9 @@ module.exports = class Cachebust
 
           if path.match target
             hashedName = @_hash path
-            inputPath = pathlib.relative(@publicFolder, path)
-            outputPath = pathlib.relative(@publicFolder, hashedName)
-            hashedFiles[inputPath] = outputPath
+            inputName = pathlib.relative(@publicFolder, path)
+            outputName = pathlib.relative(@publicFolder, hashedName)
+            hashedFiles[inputName] = outputName
 
       @replaceContent hashedFiles
 
