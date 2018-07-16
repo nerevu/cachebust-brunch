@@ -27,6 +27,7 @@ module.exports = class Hash
           outputPath = pathlib.relative(@publicFolder, hashedName)
           hashedFiles[inputPath] = outputPath
 
+    @replaceContent hashedFiles
     manifest = @options.manifest or pathlib.join @publicFolder, 'manifest.json'
     fs.writeFileSync manifest, JSON.stringify(hashedFiles, null, 4)
 
@@ -47,6 +48,26 @@ module.exports = class Hash
     fs.renameSync file, outputFile
     outputFile
 
+  replaceContent: (hashedFiles) =>
+    reference = @options.reference or 'index.html'
 
+    glob "#{@publicFolder}/#{reference}", {}, (err, refFiles) ->
+      if err
+        throw new Error('Error with reference param ', err)
 
+      for _, refFile of refFiles
+        if fs.existsSync(refFile)
+          content = fs.readFileSync(refFile, 'UTF-8')
 
+          for inputPath, outputPath of hashedFiles
+            ext = path.extname(inputPath)
+            base = path.basename(inputPath, ext)
+            regExp = new RegExp(base + ext)
+
+            if regExp.test(content)
+              content = content.replace(regExp, outputPath)
+              debug("Replaced #{inputPath} by #{outputPath} in #{refFile}")
+
+          fs.writeFileSync(refFile, content)
+        else
+          throw new Error('File not found ', refFile)
