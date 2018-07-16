@@ -8,34 +8,34 @@ module.exports = class Hash
 
   constructor: (@config) ->
     @options = @config?.plugins?.hash ? {}
+    @targets = @options.extensions or [/\.css$/, /\.js$/]
+    @publicFolder = @config.paths.public
 
-  onCompile: (generatedFiles, generatedAssets) ->
-    paths = glob.sync(pathlib.join(@config.paths.public, '*/*.*'))
+  onCompile: (generatedFiles) ->
+    unless @config.optimize
+      return
 
-    map = {}
+    hashedFiles = {}
 
-    for path in paths
-      unless path.match(/\.map$/)
-        if @config.optimize
-          outputPath = @_hash path
-        else
-          outputPath = path
+    for target in @targets
+      for generatedFile in generatedFiles
+        path = generatedFile.path
 
-        input_map = pathlib.relative(@config.paths.public, path)
-        output_map = pathlib.relative(@config.paths.public, outputPath)
+        if path.match target
+          hashedName = @_hash path
+          inputPath = pathlib.relative(@publicFolder, path)
+          outputPath = pathlib.relative(@publicFolder, hashedName)
+          hashedFiles[inputPath] = outputPath
 
-        map[input_map] = output_map
-
-    manifest = @options.manifest or pathlib.join(@config.paths.public, 'manifest.json')
-    fs.writeFileSync(manifest, JSON.stringify(map, null, 4))
+    manifest = @options.manifest or pathlib.join(@publicFolder, 'manifest.json')
+    fs.writeFileSync(manifest, JSON.stringify(hashedFiles, null, 4))
 
   _calculateHash: (file) ->
     data = fs.readFileSync file
     shasum = crypto.createHash 'sha1'
     shasum.update(data)
     precision = @options.precision or 8
-    shasum.digest('hex')[0..precision-1]
-
+    shasum.digest('hex')[0...precision]
 
   _hash: (file) ->
     dir = pathlib.dirname(file)
@@ -43,11 +43,11 @@ module.exports = class Hash
     base = pathlib.basename(file, ext)
 
     hash = @_calculateHash file
+    outputBase = "#{base}-#{hash}#{ext}"
+    outputFile = pathlib.join(dir, outputBase)
+    fs.renameSync file, outputFile
+    outputFile
 
-    output_base = "#{base}-#{hash}#{ext}"
-    output_file = pathlib.join(dir, output_base)
 
 
-    fs.renameSync file, output_file
 
-    output_file
