@@ -1,9 +1,8 @@
 expect = require('chai').expect
-
 path = require 'path'
 fse = require 'fs-extra'
 
-Hash = require('../src/index')
+Cachebust = require('../src/index')
 
 FIXTURES_SHA1SUMS =
   'public/empty.css': 'da39a3ee'
@@ -24,11 +23,11 @@ setupGeneratedFiles = ->
   fse.removeSync path.join(__dirname, 'public')
   fse.copySync path.join(__dirname, 'fixtures'), path.join(__dirname, 'public')
 
-describe 'Hash', ->
+describe 'Cachebust', ->
   hash = null
 
   beforeEach ->
-    hash = new Hash(
+    hash = new Cachebust(
       env: ['production']
       paths:
         public: path.join('test', 'public')
@@ -37,8 +36,8 @@ describe 'Hash', ->
 #  after ->
 #    fse.removeSync path.join(__dirname, 'public')
 
-  it 'is an instance of Hash', ->
-    expect(hash).to.be.instanceof(Hash)
+  it 'is an instance of Cachebust', ->
+    expect(hash).to.be.instanceof(Cachebust)
 
   describe 'hash calculation', ->
     beforeEach ->

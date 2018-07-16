@@ -3,51 +3,70 @@ crypto = require 'crypto'
 pathlib = require 'path'
 glob = require 'glob'
 
-module.exports = class Hash
+module.exports = class Cachebust
   brunchPlugin: yes
 
   constructor: (@config) ->
-    @options = @config?.plugins?.hash ? {}
+    @options = @config.plugins?.cachebust ? {}
+    @publicFolder = @config.paths.public
+    @targets = @options.extensions or [/\.css$/, /\.js$/]
 
-  onCompile: (generatedFiles, generatedAssets) ->
-    paths = glob.sync(pathlib.join(@config.paths.public, '*/*.*'))
+  onCompile: (generatedFiles) =>
+    hashedFiles = {}
 
-    map = {}
+    unless @config.optimize
+      for target in @targets
+        for generatedFile in generatedFiles
+          path = generatedFile.path
 
-    for path in paths
-      unless path.match(/\.map$/)
-        if @config.optimize
-          outputPath = @_hash path
-        else
-          outputPath = path
+          if path.match target
+            hashedName = @_hash path
+            inputPath = pathlib.relative(@publicFolder, path)
+            outputPath = pathlib.relative(@publicFolder, hashedName)
+            hashedFiles[inputPath] = outputPath
 
-        input_map = pathlib.relative(@config.paths.public, path)
-        output_map = pathlib.relative(@config.paths.public, outputPath)
+      @replaceContent hashedFiles
 
-        map[input_map] = output_map
+    manifest = @options.manifest or pathlib.join @publicFolder, 'manifest.json'
+    fs.writeFileSync manifest, JSON.stringify(hashedFiles, null, 4)
 
-    manifest = @options.manifest or pathlib.join(@config.paths.public, 'manifest.json')
-    fs.writeFileSync(manifest, JSON.stringify(map, null, 4))
-
-  _calculateHash: (file) ->
-    data = fs.readFileSync file
+  _calculateHash: (file) =>
     shasum = crypto.createHash 'sha1'
-    shasum.update(data)
+    shasum.update fs.readFileSync file
     precision = @options.precision or 8
-    shasum.digest('hex')[0..precision-1]
+    shasum.digest('hex')[0...precision]
 
-
-  _hash: (file) ->
+  _hash: (file) =>
     dir = pathlib.dirname(file)
     ext = pathlib.extname(file)
     base = pathlib.basename(file, ext)
 
     hash = @_calculateHash file
+    outputBase = "#{base}-#{hash}#{ext}"
+    outputFile = pathlib.join(dir, outputBase)
+    fs.renameSync file, outputFile
+    outputFile
 
-    output_base = "#{base}-#{hash}#{ext}"
-    output_file = pathlib.join(dir, output_base)
+  replaceContent: (hashedFiles) =>
+    reference = @options.reference or 'index.html'
 
+    glob "#{@publicFolder}/#{reference}", {}, (err, refFiles) ->
+      if err
+        throw new Error('Error with reference param ', err)
 
-    fs.renameSync file, output_file
+      for _, refFile of refFiles
+        if fs.existsSync(refFile)
+          content = fs.readFileSync(refFile, 'UTF-8')
 
-    output_file
+          for inputPath, outputPath of hashedFiles
+            ext = path.extname(inputPath)
+            base = path.basename(inputPath, ext)
+            regExp = new RegExp(base + ext)
+
+            if regExp.test(content)
+              content = content.replace(regExp, outputPath)
+              debug("Replaced #{inputPath} by #{outputPath} in #{refFile}")
+
+          fs.writeFileSync(refFile, content)
+        else
+          throw new Error('File not found ', refFile)

@@ -1,29 +1,32 @@
 {
-  "name": "fingerprinter-brunch",
-  "version": "0.0.2",
+  "name": "cachebust-brunch",
+  "version": "0.1.0",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
-  "homepage": "https://github.com/paulcsmith/fingerprinter-brunch",
+  "homepage": "https://github.com/reubano/cachebust-brunch",
   "repository": {
     "type": "git",
-    "url": "git@github.com:paulcsmith/fingerprinter-brunch.git"
+    "url": "git@github.com:reubano/cachebust-brunch.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha && node_modules/.bin/istanbul report text-summary lcov"
+    "test": "npm run mocha && npm run istanbul",
+    "mocha": "mocha --compilers coffee:node_modules/coffeescript/register",
+    "istanbul": "istanbul report text-summary lcov"
   },
   "keywords": [
     "brunch",
     "cache",
-    "hash"
+    "hash",
+    "fingerprint"
   ],
-  "author": "Paul Smith",
+  "author": "Reuben Cummings",
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.3.0",
-    "coffee-coverage": "^0.6.3",
-    "coffee-script": "~1.1270",
+    "coffee-coverage": "^3.0.0",
+    "coffeescript": "^2.3.1",
     "fs-extra": "^0.24.0",
-    "istanbul": "^0.3.20",
-    "mocha": "^2.3.3"
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
   }
 }
