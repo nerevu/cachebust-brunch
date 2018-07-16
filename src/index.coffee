@@ -8,10 +8,10 @@ module.exports = class Hash
 
   constructor: (@config) ->
     @options = @config?.plugins?.hash ? {}
-    @targets = @options.extensions or [/\.css$/, /\.js$/]
     @publicFolder = @config.paths.public
+    @targets = @options.extensions or [/\.css$/, /\.js$/]
 
-  onCompile: (generatedFiles) ->
+  onCompile: (generatedFiles) =>
     unless @config.optimize
       return
 
@@ -27,17 +27,16 @@ module.exports = class Hash
           outputPath = pathlib.relative(@publicFolder, hashedName)
           hashedFiles[inputPath] = outputPath
 
-    manifest = @options.manifest or pathlib.join(@publicFolder, 'manifest.json')
-    fs.writeFileSync(manifest, JSON.stringify(hashedFiles, null, 4))
+    manifest = @options.manifest or pathlib.join @publicFolder, 'manifest.json'
+    fs.writeFileSync manifest, JSON.stringify(hashedFiles, null, 4)
 
-  _calculateHash: (file) ->
-    data = fs.readFileSync file
+  _calculateHash: (file) =>
     shasum = crypto.createHash 'sha1'
-    shasum.update(data)
+    shasum.update fs.readFileSync file
     precision = @options.precision or 8
     shasum.digest('hex')[0...precision]
 
-  _hash: (file) ->
+  _hash: (file) =>
     dir = pathlib.dirname(file)
     ext = pathlib.extname(file)
     base = pathlib.basename(file, ext)

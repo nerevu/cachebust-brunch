@@ -1,5 +1,4 @@
 expect = require('chai').expect
-
 path = require 'path'
 fse = require 'fs-extra'
 
