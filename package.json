@@ -1,12 +1,12 @@
 {
-  "name": "fingerprinter-brunch",
+  "name": "cachebust-brunch",
   "version": "0.0.2",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
-  "homepage": "https://github.com/paulcsmith/fingerprinter-brunch",
+  "homepage": "https://github.com/reubano/cachebust-brunch",
   "repository": {
     "type": "git",
-    "url": "git@github.com:paulcsmith/fingerprinter-brunch.git"
+    "url": "git@github.com:reubano/cachebust-brunch.git"
   },
   "scripts": {
     "test": "npm run mocha && npm run istanbul",
@@ -16,9 +16,10 @@
   "keywords": [
     "brunch",
     "cache",
-    "hash"
+    "hash",
+    "fingerprint"
   ],
-  "author": "Paul Smith",
+  "author": "Reuben Cummings",
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.3.0",

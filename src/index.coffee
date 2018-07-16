@@ -3,11 +3,11 @@ crypto = require 'crypto'
 pathlib = require 'path'
 glob = require 'glob'
 
-module.exports = class Hash
+module.exports = class Cachebust
   brunchPlugin: yes
 
   constructor: (@config) ->
-    @options = @config?.plugins?.hash ? {}
+    @options = @config.plugins?.cachebust ? {}
     @publicFolder = @config.paths.public
     @targets = @options.extensions or [/\.css$/, /\.js$/]
 
