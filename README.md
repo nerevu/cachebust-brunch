@@ -8,7 +8,9 @@ A [Brunch][] plugin that will rename assets with an unique SHA hash. This will a
 
 `npm install --save cachebust-brunch`
 
-_Note: if you're using [gzip-brunch][] make sure cachebust-brunch is listed before gzip-brunch in the dependency list of your package.json_
+_Note: make sure cachebust-brunch is listed *before* [gzip-brunch][]  in the dependency list of your package.json_
+
+_Note: make sure cachebust-brunch is listed *after* [uglify-brunch][] in the dependency list of your package.json_
 
 ## Options
 
@@ -19,6 +21,7 @@ module.exports = config:
   plugins:
     cachebust:
       manifest: 'public/manifest.json'
+      environments: ['production']
       reference: 'index.html'
       extensions: [
         /\.js$/
@@ -75,3 +78,4 @@ MIT
 
 [Brunch]: http://brunch.io
 [gzip-brunch]: https://github.com/banyan/gzip-brunch
+[uglify-brunch]: https://github.com/brunch/uglify-js-brunch
