@@ -1,12 +1,12 @@
 {
-  "name": "cachebust-brunch",
+  "name": "@nerevu/cachebust-brunch",
   "version": "0.2.0",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
-  "homepage": "https://github.com/reubano/cachebust-brunch",
+  "homepage": "https://github.com/nerevu/cachebust-brunch",
   "repository": {
     "type": "git",
-    "url": "git@github.com:reubano/cachebust-brunch.git"
+    "url": "git+ssh://git@github.com/nerevu/cachebust-brunch.git"
   },
   "scripts": {
     "test": "npm run mocha && npm run cover",
@@ -31,5 +31,11 @@
     "coffee-coverage": "^3.0.0",
     "mocha": "^5.2.0",
     "nyc": "^15.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/nerevu/cachebust-brunch/issues"
+  },
+  "directories": {
+    "test": "test"
   }
 }
