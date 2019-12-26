@@ -20,10 +20,10 @@ module.exports = class Cachebust
           path = generatedFile.path
 
           if path.match target
-            hashedName = @_hash path
-            inputName = pathlib.relative(@publicFolder, path)
-            outputName = pathlib.relative(@publicFolder, hashedName)
-            hashedFiles[inputName] = outputName
+            hashedPath = @_hash path
+            inputPath = pathlib.relative(@publicFolder, path)
+            outputPath = pathlib.relative(@publicFolder, hashedPath)
+            hashedFiles[inputPath] = outputPath
 
       @replaceContent hashedFiles
 
@@ -36,29 +36,28 @@ module.exports = class Cachebust
     precision = @options.precision or 8
     shasum.digest('hex')[0...precision]
 
-  _hash: (file) =>
-    dir = pathlib.dirname(file)
-    ext = pathlib.extname(file)
-    base = pathlib.basename(file, ext)
+  _hash: (path) =>
+    dir = pathlib.dirname(path)
+    ext = pathlib.extname(path)
+    base = pathlib.basename(path, ext)
 
-    hash = @_calculateHash file
-    outputBase = "#{base}-#{hash}#{ext}"
-    outputFile = pathlib.join(dir, outputBase)
-    fs.renameSync file, outputFile
-    outputFile
+    hash = @_calculateHash path
+    outputFile = "#{base}-#{hash}#{ext}"
+    outputPath = pathlib.join(dir, outputFile)
+    fs.renameSync path, outputPath
+    outputPath
+
 
   replaceContent: (hashedFiles) =>
     reference = @options.reference or 'index.html'
     refFile = "#{@publicFolder}/#{reference}"
     content = fs.readFileSync(refFile, 'UTF-8')
 
-    for inputName, outputName of hashedFiles
-      ext = path.extname(inputName)
-      base = path.basename(inputName, ext)
-      regExp = new RegExp("#{base}#{ext}")
+    for inputPath, outputPath of hashedFiles
+      regExp = new RegExp(inputPath)
 
       if regExp.test(content)
-        content = content.replace(regExp, outputName)
-        debug("Replaced #{inputName} by #{outputName} in #{refFile}")
+        content = content.replace(regExp, outputPath)
+        debug("Replaced #{inputPath} by #{outputPath} in #{refFile}")
 
     fs.writeFileSync(refFile, content)

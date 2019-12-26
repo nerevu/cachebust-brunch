@@ -1,6 +1,6 @@
 {
   "name": "cachebust-brunch",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
   "homepage": "https://github.com/reubano/cachebust-brunch",
@@ -9,9 +9,9 @@
     "url": "git@github.com:reubano/cachebust-brunch.git"
   },
   "scripts": {
-    "test": "npm run mocha && npm run istanbul",
+    "test": "npm run mocha && npm run cover",
     "mocha": "mocha --compilers coffee:node_modules/coffeescript/register",
-    "istanbul": "istanbul report text-summary lcov"
+    "cover": "nyc report --reporter=text-lcov --reporter=text-summary"
   },
   "keywords": [
     "brunch",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "coffee-coverage": "^3.0.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^15.0.0"
   }
 }
