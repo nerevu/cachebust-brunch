@@ -1,6 +1,6 @@
 {
   "name": "@nerevu/cachebust-brunch",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Rename assets based on SHA1 hash for cache busting",
   "main": "./src/index",
   "homepage": "https://github.com/nerevu/cachebust-brunch",
