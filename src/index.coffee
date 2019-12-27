@@ -4,19 +4,19 @@ pathlib = require 'path'
 debug = require('debug') 'brunch:cachebust'
 
 module.exports = class Cachebust
-  brunchPlugin: yes
+  brunchPlugin: true
 
   constructor: (@config) ->
-    @options = @config.plugins?.cachebust ? {}
-    @publicFolder = @config.paths.public
-    @targets = @options.extensions or [/\.css$/, /\.js$/]
+    @options = @config?.plugins?.cachebust or {}
+    @publicFolder = @config?.paths?.public or 'public'
+    @targets = @options?.extensions or [/\.css$/, /\.js$/]
 
   onCompile: (generatedFiles) =>
     hashedFiles = {}
 
     if @config.optimize
-      for target in @targets
-        for generatedFile in generatedFiles
+      @targets.forEach (target) =>
+        generatedFiles.forEach (generatedFile) =>
           path = generatedFile.path
 
           if path.match target
@@ -53,7 +53,7 @@ module.exports = class Cachebust
     refFile = "#{@publicFolder}/#{reference}"
     content = fs.readFileSync(refFile, 'UTF-8')
 
-    for inputPath, outputPath of hashedFiles
+    Object.entries(hashedFiles).forEach ([inputPath, outputPath]) =>
       regExp = new RegExp(inputPath)
 
       if regExp.test(content)
