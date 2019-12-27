@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "npm run mocha && npm run cover",
-    "mocha": "mocha --compilers coffee:node_modules/coffeescript/register",
+    "mocha": "mocha --require coffeescript/register test/**/*.coffee",
     "cover": "nyc report --reporter=text-lcov --reporter=text-summary"
   },
   "keywords": [
@@ -29,7 +29,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "coffee-coverage": "^3.0.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.2.2",
     "nyc": "^15.0.0"
   },
   "bugs": {
