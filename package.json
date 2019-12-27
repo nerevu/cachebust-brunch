@@ -1,8 +1,8 @@
 {
   "name": "@nerevu/cachebust-brunch",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Rename assets based on SHA1 hash for cache busting",
-  "main": "./src/index",
+  "main": "./lib/index",
   "homepage": "https://github.com/nerevu/cachebust-brunch",
   "repository": {
     "type": "git",
@@ -10,8 +10,9 @@
   },
   "scripts": {
     "test": "npm run mocha && npm run cover",
-    "mocha": "mocha --compilers coffee:node_modules/coffeescript/register",
-    "cover": "nyc report --reporter=text-lcov --reporter=text-summary"
+    "mocha": "mocha --require coffeescript/register test/**/*.coffee",
+    "cover": "nyc report --reporter=text-lcov --reporter=text-summary",
+    "prepare": "coffee -o lib/ src/"
   },
   "keywords": [
     "brunch",
@@ -22,14 +23,14 @@
   "author": "Reuben Cummings",
   "license": "MIT",
   "dependencies": {
-    "coffeescript": "^2.3.1",
     "fs-extra": "^0.24.0",
     "debug": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^3.3.0",
     "coffee-coverage": "^3.0.0",
-    "mocha": "^5.2.0",
+    "coffeescript": "^2.4.1",
+    "mocha": "^6.2.2",
     "nyc": "^15.0.0"
   },
   "bugs": {
