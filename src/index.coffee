@@ -7,7 +7,7 @@ module.exports = class Cachebust
   brunchPlugin: true
 
   constructor: (@config) ->
-    @options = @config?.plugins?.cachebust or {}
+    @options = Object.assign {enabled: true}, @config?.plugins?.cachebust or {}
     @publicFolder = @config?.paths?.public or 'public'
     @targets = @options?.extensions or [/\.css$/, /\.js$/]
 
