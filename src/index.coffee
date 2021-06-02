@@ -7,17 +7,17 @@ module.exports = class Cachebust
   brunchPlugin: true
 
   constructor: (@config) ->
-    @options = @config?.plugins?.cachebust or {}
+    @options = Object.assign {enabled: true}, @config?.plugins?.cachebust or {}
     @publicFolder = @config?.paths?.public or 'public'
     @targets = @options?.extensions or [/\.css$/, /\.js$/]
 
-  onCompile: (generatedFiles) =>
+  onCompile: (files, assets) =>
     hashedFiles = {}
 
-    if @config.optimize
+    if @config.optimize and @options.enabled
       @targets.forEach (target) =>
-        generatedFiles.forEach (generatedFile) =>
-          path = generatedFile.path
+        files.forEach (file) =>
+          path = file.path
 
           if path.match target
             hashedPath = @_hash path

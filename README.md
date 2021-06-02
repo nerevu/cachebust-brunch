@@ -28,6 +28,7 @@ module.exports = config:
         /\.css$/
       ]
       precision: 8
+      enabled: true
 ```
 
 ### manifest
@@ -47,6 +48,10 @@ The array will be matched against the list of generated files.
 
 The number of characters of the SHA1 hash to use in the hashed
 filename. Default should be fine.
+
+### enabled
+
+Whether or not the plugin is enabled.
 
 ## Brunch build
 
