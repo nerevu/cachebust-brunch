@@ -11,13 +11,13 @@ module.exports = class Cachebust
     @publicFolder = @config?.paths?.public or 'public'
     @targets = @options?.extensions or [/\.css$/, /\.js$/]
 
-  onCompile: (generatedFiles) =>
+  onCompile: (files, assets) =>
     hashedFiles = {}
 
-    if @config.optimize
+    if @config.optimize and @options.enabled
       @targets.forEach (target) =>
-        generatedFiles.forEach (generatedFile) =>
-          path = generatedFile.path
+        files.forEach (file) =>
+          path = file.path
 
           if path.match target
             hashedPath = @_hash path
