@@ -53,7 +53,7 @@ module.exports = class Cachebust
     refFile = "#{@publicFolder}/#{reference}"
     content = fs.readFileSync(refFile, 'UTF-8')
 
-    Object.entries(hashedFiles).forEach ([inputPath, outputPath]) =>
+    Object.entries(hashedFiles).forEach ([inputPath, outputPath]) ->
       regExp = new RegExp(inputPath)
 
       if regExp.test(content)
